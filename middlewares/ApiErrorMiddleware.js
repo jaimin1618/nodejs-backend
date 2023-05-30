@@ -3,11 +3,7 @@ const BadRequestError = require("../errors/BadRequestError");
 const { StatusCodes } = require("http-status-codes");
 
 const HandleApiError = (error, req, res, next) => {
-  if (error instanceof ApiError)
-    return res.status(error.statusCode).json({
-      message: error.message,
-    });
-  else if (error instanceof BadRequestError)
+  if (error instanceof BadRequestError)
     return res.status(error.statusCode).json({
       message: error.message,
     });

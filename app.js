@@ -21,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 const SERVER_DOMAIN = process.env.SERVER_DOMAIN || null;
 const HandleNotFound = require("./middlewares/HandleNotFoundMiddleware");
 const HandleApiError = require("./middlewares/ApiErrorMiddleware");
+const HandleBadRequest = require("./middlewares/HandleBadRequestMiddleware");
 const ErrorLogger = require("./config/logger");
 
 // log middlewares (console print and file logs)
@@ -38,9 +39,12 @@ app.use(cookieParser());
 
 // routes main
 const Routes = require("./routes");
-app.use("/api/v1", Routes);
 
-// API Error handling
+// implement routes, prefix and bad request error throw middleware
+app.use("/api/v1", Routes);
+app.use(HandleBadRequest);
+
+// Custom API Error handler or error catcher and sending error response
 app.use(HandleNotFound);
 app.use(HandleApiError);
 
