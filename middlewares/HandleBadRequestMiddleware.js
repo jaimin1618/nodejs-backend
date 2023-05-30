@@ -3,7 +3,7 @@ const BadRequestError = require("../errors/BadRequestError");
 
 const HandleBadRequest = (req, res, next) => {
   const { errors } = validationResult(req);
-  const _ = errors.map((item) => {
+  const requestErrors = errors.map((item) => {
     return {
       value: item.value,
       message: item.msg,
@@ -11,7 +11,8 @@ const HandleBadRequest = (req, res, next) => {
     };
   });
 
-  if (errors.length > 0) throw new BadRequestError("Bad Request", 400, _);
+  if (errors.length > 0)
+    throw new BadRequestError("Bad Request", requestErrors);
   next();
 };
 
