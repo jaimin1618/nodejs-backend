@@ -10,7 +10,7 @@ const logger = require("morgan");
 
 // server
 const http = require("http");
-const https = require("https");
+// const https = require("https");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const DBConnect = require("./config/db");
@@ -20,21 +20,21 @@ const constants = require("./config/constants");
 const app = express();
 const ENVIRONMENT = process.env.ENVIRONMENT || "production";
 const HTTP_PORT = process.env.HTTP_PORT || 80;
-const HTTPS_PORT = process.env.HTTPS_PORT || 443;
+// const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 const SERVER_DOMAIN = process.env.SERVER_DOMAIN || null;
 const HandleNotFound = require("./middlewares/HandleNotFoundMiddleware");
 const HandleApiError = require("./middlewares/ApiErrorMiddleware");
 const HandleBadRequest = require("./middlewares/HandleBadRequestMiddleware");
 const ErrorLogger = require("./config/logger");
-const HttpsRequestOnly = require("./middlewares/HttpsRequestOnly");
-const SSL = require("./config/ssl");
+// const HttpsRequestOnly = require("./middlewares/HttpsRequestOnly");
+// const SSL = require("./config/ssl");
 
 // log middlewares (console print and file logs)
 app.use(logger(ENVIRONMENT === "development" ? "dev" : "common")); // log everything in console
 app.use(logger("combined", ErrorLogger)); // only log 4XX and 5XX in file
 
 // middlewares
-app.use(HttpsRequestOnly);
+// app.use(HttpsRequestOnly);
 app.use(helmet());
 app.use(xss());
 app.use(rateLimiter);
@@ -63,18 +63,18 @@ const main = async () => {
 
   // start HTTP and HTTPS servers
   const httpServer = http.createServer(app);
-  const httpsServer = https.createServer(SSL, app);
+  // const httpsServer = https.createServer(SSL, app);
 
-  httpServer.listen(HTTP_PORT);
-  httpsServer.listen(HTTPS_PORT, SERVER_DOMAIN, async () => {
+  httpServer.listen(HTTP_PORT, SERVER_DOMAIN, async () => {
     if (ENVIRONMENT === "development")
       console.log(
         "Listening on %s:%s",
-        httpsServer.address().address,
-        httpsServer.address().port
+        httpServer.address().address,
+        httpServer.address().port
       );
     else console.log("Server started!");
   });
+  // httpsServer.listen(HTTPS_PORT);
 };
 
 main().catch((e) => {
