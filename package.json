@@ -1,16 +1,19 @@
 {
-  "name": "nodejs_backend",
+  "name": "nodejs-backend-setup",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "My preferred Node.js backend project setup. Codebase is organized keeping in mind both development and production environments.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "server": "nodemon app.js"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "nodejs-project",
+    "nodejs-backend",
+    "nodejs-project-boilerplate"
+  ],
+  "author": "Jaimin Chokhawala",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
