@@ -1,18 +1,14 @@
-const ApiError = require("../errors/ApiError");
-const BadRequestError = require("../errors/BadRequestError");
+const ApiResponse = require("../controllers/response/ApiResponse");
 const { StatusCodes } = require("http-status-codes");
 
-const HandleApiError = (error, req, res, next) => {
-  if (error instanceof BadRequestError)
-    return res.status(error.statusCode).json({
-      message: error.message,
-    });
+const ApiErrorMiddleware = (e, req, res, next) => {
+  const statusCode = e.status || StatusCodes.INTERNAL_SERVER_ERROR;
+  const message = e.message || "Internal Server Error";
+  const errorObject = e.error || null;
 
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    status: "Something went wrong, Internal Server Error",
-    message: error.message,
-    stack: process.env.ENVIRONMENT === "development" ? error.stack : null,
-  });
+  return res
+    .status(statusCode)
+    .json(ApiResponse(message, errorObject, statusCode, true));
 };
 
-module.exports = HandleApiError;
+module.exports = ApiErrorMiddleware;

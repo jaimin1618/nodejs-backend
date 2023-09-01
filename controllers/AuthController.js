@@ -2,7 +2,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const AsyncHandler = require("express-async-handler");
-const User = require("../models/UserModel");
+const { StatusCodes } = require("http-status-codes");
+
+const User = require("../models/User");
+const ApiError = require("./error/ApiError");
+const ApiResponse = require("./response/ApiResponse");
 
 /**
  * @desc Register new user
@@ -12,17 +16,14 @@ const User = require("../models/UserModel");
 const register = AsyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
-  if (!username || !email || !password) {
-    res.status(400);
-    throw new Error("Add all required fields");
-  }
-
   // is user exists
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400);
-    throw new Error("User already exists, change your email address or login");
+    throw new ApiError(
+      "User with provided Email address already exists",
+      StatusCodes.CONFLICT
+    );
   }
 
   // Hash password
@@ -37,19 +38,20 @@ const register = AsyncHandler(async (req, res) => {
   });
 
   if (!user) {
-    res.status(500);
-    throw new Error("Server Error! Unable to create new user. Try again later");
+    throw new ApiError(
+      "Internal Server Error! Server failed creating new user."
+    );
   }
 
-  res.status(201).json({
-    message: "success",
-    data: {
-      _id: user.id,
-      username: user.username,
-      email: user.email,
-      token: generateToken({ id: user._id }),
-    },
-  });
+  res
+    .status(StatusCodes.CREATED)
+    .json(
+      ApiResponse(
+        "User registered successfully.",
+        { user },
+        StatusCodes.CREATED
+      )
+    );
 });
 
 /**
@@ -65,19 +67,23 @@ const login = AsyncHandler(async (req, res) => {
   const authenticate = user && (await bcrypt.compare(password, user.password));
 
   if (!authenticate) {
-    res.status(500);
-    throw new Error("Invalid credentials!");
+    throw new ApiError("Invalid credentials!", StatusCodes.UNAUTHORIZED, {
+      credentials: { email, password },
+    });
   }
 
-  res.status(201).json({
-    message: "success",
-    data: {
-      _id: user.id,
-      username: user.username,
+  const responseData = {
+    user: {
+      _id: user._id,
+      username: user.fullName,
       email: user.email,
       token: generateToken(user._id),
     },
-  });
+  };
+
+  res
+    .status(StatusCodes.OK)
+    .json(ApiResponse("User logged in successfully.", responseData));
 });
 
 /**
@@ -86,16 +92,11 @@ const login = AsyncHandler(async (req, res) => {
  * @access private
  */
 const getCurrentUser = AsyncHandler(async (req, res) => {
-  const { _id, username, email } = req.user;
+  const responseData = req.user;
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      _id,
-      username,
-      email,
-    },
-  });
+  res
+    .status(StatusCodes.OK)
+    .json(ApiResponse("Current user data.", { user: responseData }));
 });
 
 /**
