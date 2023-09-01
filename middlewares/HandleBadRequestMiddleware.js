@@ -1,18 +1,15 @@
 const { validationResult } = require("express-validator");
-const BadRequestError = require("../errors/BadRequestError");
+const ApiResponse = require("../controllers/response/ApiResponse");
+const ApiError = require("../controllers/error/ApiError");
 
 const HandleBadRequest = (req, res, next) => {
   const { errors } = validationResult(req);
-  const requestErrors = errors.map((item) => {
-    return {
-      value: item.value,
-      message: item.msg,
-      parameter: item.path,
-    };
-  });
 
-  if (errors.length > 0)
-    throw new BadRequestError("Bad Request", requestErrors);
+  if (errors.length > 0) {
+    const error = errors.shift();
+    throw new ApiError(error.msg, 400, null);
+  }
+
   next();
 };
 
