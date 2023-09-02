@@ -134,7 +134,7 @@ Contributions are always welcome! If you'd like to contribute to this project, p
 2. Clone the forked repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/your-project.git
+git clone https://github.com/jaimin1618/nodejs-backend.git
 ```
 
 3. Clone the forked repository to your local machine:
