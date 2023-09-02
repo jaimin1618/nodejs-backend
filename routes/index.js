@@ -1,6 +1,7 @@
 const AsyncHandler = require("express-async-handler");
 const express = require("express");
 const router = express.Router();
+const ApiResponse = require("../controllers/response/ApiResponse");
 
 /*==============================
 Development guide:-
@@ -9,15 +10,19 @@ Development guide:-
 
 ==============================*/
 
+// importing all routes
 const AuthRoutes = require("./AuthRoutes");
 
 router.use(
   "/",
   AsyncHandler(async (req, res) => {
-    res.status(200).json({
-      message: "Api status Running",
-    });
+    res.json(
+      ApiResponse("Api Running Successfully.", null, StatusCodes.CREATED)
+    );
   })
 );
+
+// assign prefix - to routes
+router.use("auth", AuthRoutes);
 
 module.exports = router;

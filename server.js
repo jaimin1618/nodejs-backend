@@ -33,7 +33,6 @@ const HandleNotFound = require("./middlewares/HandleNotFoundMiddleware");
 const HandleApiError = require("./middlewares/ApiErrorMiddleware");
 const ErrorLogger = require("./config/logger");
 // const HttpsRequestOnly = require("./middlewares/HttpsRequestOnly"); // for production use
-// const SSL = require("./config/ssl"); // for production use
 
 /*==============================
 include environment variables
