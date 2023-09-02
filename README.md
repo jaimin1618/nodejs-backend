@@ -59,7 +59,7 @@ Start the server
 npm run server
 ```
 
-## Usage/Examples
+## Usage and examples
 
 #### development phase practices.
 
