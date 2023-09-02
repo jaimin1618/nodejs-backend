@@ -81,19 +81,19 @@ npm run server
 - Use common api response structure for all endpoints - as shown in below example.
 
   ```nodejs
-    res.json(
-      ApiResponse("message", data, StatusCode)
-    );
+  res.json(
+    ApiResponse("message", data, StatusCode)
+  );
   ```
 
 - Use common api error response structure to throw errors - as shown in below example.
 
   ```nodejs
-    if (!authenticate) {
-      throw new ApiError("Invalid credentials!", StatusCodes.UNAUTHORIZED, {
-      credentials: { email, password },
-      });
-    }
+  if (!authenticate) {
+    throw new ApiError("Invalid credentials!", StatusCodes.UNAUTHORIZED, {
+    credentials: { email, password },
+    });
+  }
   ```
 
 - Let the middleware handle BAD_REQUEST errors.
