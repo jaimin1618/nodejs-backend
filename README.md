@@ -8,7 +8,7 @@ My preferred Node.js backend project setup. Codebase is organized keeping in min
   - [Prerequisites](#prerequisites)
   - [Tech stack](#tech-stack)
   - [Installation](#installation)
-- [Usage/Example](#Usage/Examples)
+- [Usage/Example](#usage-and-examples)
 - [Contributing](#contributing)
 - [Feedback](#feedback)
 - [License](#license)
